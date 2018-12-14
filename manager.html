@@ -1,13 +1,117 @@
 <!doctype html>
 <html>
   <head>
-    <!-- <link rel="stylesheet" href="chrome://global/skin/in&#45;content/common.css"/> -->
+    <link rel="stylesheet" href="./common.css"/>
     <link rel="stylesheet" href="./manager.css"/>
+
+<style>
+.Card {
+  background: var(--in-content-box-background);
+  border-radius: 4px;
+  box-shadow: var(--card-shadow);
+  margin: 0 0 8px;
+  padding: 16px;
+  transition: box-shadow 150ms;
+}
+
+.Card:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.Card--heading {
+  font-weight: 600;
+  display: flex;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.Card--subheading {
+  font-size: .8em;
+}
+
+.AddonCard--icon {
+  height: 36px;
+  width: 36px;
+  margin-right: 16px;
+}
+
+.AddonCard {
+  display: flex;
+  margin: 16px 0;
+}
+
+.AddonCard--content {
+  flex-grow: 1;
+}
+
+.MoreMenu {
+  width: 24px;
+  height: 24px;
+  background: url("chrome://browser/skin/page-action.svg") no-repeat 4px 4px;
+  border-radius: 3px;
+  transition: background-color 100ms;
+  position: relative;
+  margin-top: -8px;
+  margin-inline-end: -8px;
+  flex-shrink: 0;
+}
+
+.MoreMenu:hover {
+  background-color: var(--grey-30);
+}
+
+.MoreMenu:not([open]) > .Panel {
+  display: none;
+}
+
+.Panel {
+  background-color: white;
+  border: 1px solid var(--grey-30);
+  border-radius: 5px;
+  position: absolute;
+  top: 30px;
+  left: -24px;
+  padding-top: 16px;
+  padding-bottom: 4px;
+  min-width: 200px;
+  z-index: 100;
+}
+
+.Panel::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--grey-30);
+  position: absolute;
+  top: -5px;
+  left: 30px;
+  transform: rotate(135deg);
+  background: #fff;
+  border-top: none;
+  border-right: none;
+
+}
+
+.PanelSeparator {
+  height: 1px;
+  width: 100%;
+  background-color: var(--grey-30);
+  margin: 6px 0;
+}
+
+.PanelItem {
+  cursor: default;
+  padding: 6px 16px;
+  transition: background-color 100ms;
+}
+
+.PanelItem:hover {
+  background-color: var(--grey-90-a10);
+}
+</style>
   </head>
 
   <body>
-    <h1>Add-ons Manager</h1>
-
     <div id="content">
       <section class="sidebar">
         <a class="sidebar-item" href="#discover">Get Add-ons</a>
@@ -15,29 +119,41 @@
         <a class="sidebar-item" href="#themes">Themes</a>
       </section>
       <section class="main">
+        <h2>Manage your extensions</h2>
+
+        <div class="Card AddonCard">
+          <img class="AddonCard--icon" src="data:image/png;base64,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" alt="" />
+          <div class="AddonCard--content">
+            <div class="Card--heading">uBlock Origin</div>
+            <div class="Card--subheading">Finally, an efficient blocker. Easy on CPU and memory.</div>
+          </div>
+          <div class="MoreMenu">
+            <div class="Panel">
+              <div class="PanelItem">Disable</div>
+              <div class="PanelItem">Remove</div>
+              <div class="PanelSeparator"></div>
+              <div class="PanelItem">Advanced Options</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="Card AddonCard">
+          <img class="AddonCard--icon" src="data:image/png;base64,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" alt="" />
+          <div class="AddonCard--content">
+            <div class="Card--heading">Facebook Container</div>
+            <div class="Card--subheading">Prevent Facebook from tracking you around the web. The Facebook Container extension for Firefox helps you take control and isolate your web activity from Facebook.</div>
+          </div>
+          <div class="MoreMenu">
+            <div class="Panel">
+              <div class="PanelItem">Disable</div>
+              <div class="PanelItem">Remove</div>
+              <div class="PanelSeparator"></div>
+              <div class="PanelItem">Advanced Options</div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
-
-    <template id="CardTemplate">
-<style>
-:host {
-  background: var(--in-content-box-background);
-  border-radius: 4px;
-  box-shadow: var(--card-shadow);
-  display: block;
-  margin: 0 0 8px;
-  padding: 16px;
-  transition: box-shadow 150ms;
-}
-
-:host:hover {
-  box-shadow: var(--card-shadow-hover);
-}
-</style>
-        <div class="Card--heading" name="heading"></div>
-        <div class="Card--subheading" name="subheading"></div>
-    </template>
-
-    <script src="./manager.js"></script>
+    <script src="chrome://browser/content/extensions/in-content/manager.js"></script>
   </body>
 </html>
