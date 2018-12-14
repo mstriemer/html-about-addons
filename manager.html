@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- <link rel="stylesheet" href="chrome://global/skin/in&#45;content/common.css"/> -->
+    <link rel="stylesheet" href="./manager.css"/>
+  </head>
+
+  <body>
+    <h1>Add-ons Manager</h1>
+
+    <div id="content">
+      <section class="sidebar">
+        <a class="sidebar-item" href="#discover">Get Add-ons</a>
+        <a class="sidebar-item" href="#extensions" selected>Extensions</a>
+        <a class="sidebar-item" href="#themes">Themes</a>
+      </section>
+      <section class="main">
+      </section>
+    </div>
+
+    <template id="CardTemplate">
+<style>
+:host {
+  background: var(--in-content-box-background);
+  border-radius: 4px;
+  box-shadow: var(--card-shadow);
+  display: block;
+  margin: 0 0 8px;
+  padding: 16px;
+  transition: box-shadow 150ms;
+}
+
+:host:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+</style>
+        <div class="Card--heading" name="heading"></div>
+        <div class="Card--subheading" name="subheading"></div>
+    </template>
+
+    <script src="./manager.js"></script>
+  </body>
+</html>
